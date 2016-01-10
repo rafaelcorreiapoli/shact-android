@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+    <color name="colorPrimary">#673AB7</color>
+    <color name="colorPrimaryDark">#512DA8</color>
+    <color name="colorAccent">#FF4081</color>
+    -->
+    <!--
+    <color name="colorPrimary">#1bbc9b</color>
+    <color name="colorPrimaryDark">#158f76</color>
+    <color name="colorAccent">#ff6933</color>
+    -->
+    <color name="colorPrimary">#34495E</color>
+    <color name="colorPrimaryDark">#22303d</color>
+    <color name="colorAccent">#F9690E</color>
+
+
+
+
+    <color name="primaryText">#212121</color>
+    <color name="secondaryText">#727272</color>
+    <color name="primaryLight">#D1C4E9</color>
+    <color name="primaryGray">#B6B6B6</color>
+
+    <color name="facebookColor">#3b5998</color>
+    <color name="twitterColor">#55acee</color>
+    <color name="snapchatColor">#fffc00</color>
+    <color name="googleplusColor">#dc4e41</color>
+    <color name="instagramColor">#3f729b</color>
+    <color name="youtubeColor">#cd201f</color>
+    <color name="whatsappColor">#43d854</color>
+    <color name="linkedinColor">#0077b5</color>
+    <color name="githubColor">#ff9933</color>
+    <color name="skypeColor">#00aff0</color>
+    <color name="pinterestColor">#bd081c</color>
+</resources>

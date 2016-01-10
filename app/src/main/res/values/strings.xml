@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Shact</string>
+
+    <string name="username_hint">Usuário</string>
+    <string name="password_hint">Senha</string>
+    <string name="password_confirmation_hint">Confirmar senha</string>
+    <string name="name_hint">Nome</string>
+    <string name="register_text">Registrar</string>
+    <string name="login_text">Login</string>
+    <string name="back_to_login">Já tem uma conta? </string>
+    <string name="back_to_register">Não tem uma conta?</string>
+    <string name="action_settings">Preferências</string>
+    <string name="action_user">Usuário</string>
+    <string name="action_search">Procurar</string>
+    <string name="not_registered_profile">Não cadastrado</string>
+    <string name="drawer_home">Início</string>
+    <string name="drawer_networks">Redes</string>
+    <string name="drawer_contacts">Contatos</string>
+    <string name="drawer_profile">Meu Perfil</string>
+    <string name="drawer_help">Ajuda</string>
+    <string name="drawer_pictures">Fotos</string>
+    <string name="drawer_logout">Sair</string>
+    <string name="visit_profile">Visitar Perfil</string>
+    <string name="delete_profile">Descadastrar Perfil</string>
+    <string name="cancel">Cancelar</string>
+    <string name="ok">OK</string>
+    <string name="title_activity_networks">NetworksActivity</string>
+    <string name="tab_recents"></string>
+    <string name="tab_selfie"></string>
+    <string name="tab_contacts"></string>
+</resources>
