@@ -59,8 +59,14 @@ public class LoginActivity extends RoboActivity implements View.OnClickListener 
         buttonLogin.setOnClickListener(this);
         goToRegister.setOnClickListener(this);
 
+        MyApplication app = (MyApplication) getApplicationContext();
+        app.setCurrentUser(null);
+
         pref = getApplicationContext().getSharedPreferences("ShactPreferences", 0); // 0 - for private mode
         editor = pref.edit();
+
+        editor.putString("token", null);
+        editor.commit();
 
     }
 

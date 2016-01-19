@@ -9,17 +9,36 @@ import com.mikepenz.iconics.IconicsDrawable;
  * Created by rafa93br on 08/01/2016.
  */
 public class Network {
+    String _id;
     String name;
     Integer color;
     String icon;
     String identifier;
-    Profile profile;
+    User.Profile profile;
 
-    public Network(String name, Integer color, String icon, String identifier) {
+    public User.Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(User.Profile profile) {
+        this.profile = profile;
+    }
+
+    public Network(String _id, String name, Integer color, String icon, String identifier) {
+        this._id = _id;
         this.name = name;
         this.color = color;
         this.icon = icon;
         this.identifier = identifier;
+    }
+
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
     public String getName() {
@@ -30,20 +49,16 @@ public class Network {
         this.name = name;
     }
 
-    public Profile getProfile() {
-        return profile;
-    }
 
     public IconicsDrawable getDrawable(Context context, Integer color) {
         return new IconicsDrawable(context, getIcon())
                 .sizeDp(150)
                 .paddingDp(30)
+                .contourWidthDp(3)
+                .contourColor(Color.BLACK)
                 .color(color);
     }
 
-    public void setProfile(Profile profile) {
-        this.profile = profile;
-    }
 
     public Integer getColor() {
         return color;

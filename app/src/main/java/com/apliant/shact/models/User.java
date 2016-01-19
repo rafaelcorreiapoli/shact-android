@@ -12,6 +12,8 @@ import com.android.volley.toolbox.ImageRequest;
 import com.apliant.shact.network.VolleySingleton;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
+import java.util.List;
+
 /**
  * Created by rafa93br on 07/01/2016.
  */
@@ -21,7 +23,45 @@ public class User {
     private String email;
     private String avatar;
     private String _id;
-    private Bitmap avatarBitmap;
+    private transient Bitmap avatarBitmap;
+    private List<Profile> profiles;
+
+
+    public static class Profile {
+        private String name;
+        private String networkId;
+        private String _id;
+
+        public Profile(String name, String networkId, String _id) {
+            this.name = name;
+            this.networkId = networkId;
+            this._id = _id;
+        }
+
+        public String get_id() {
+            return _id;
+        }
+
+        public void set_id(String _id) {
+            this._id = _id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getNetworkId() {
+            return networkId;
+        }
+
+        public void setNetworkId(String networkId) {
+            this.networkId = networkId;
+        }
+    }
 
     public User(String name, String username, String email, String avatar, String _id) {
         this.name = name;
@@ -29,6 +69,14 @@ public class User {
         this.email = email;
         this.avatar = avatar;
         this._id = _id;
+    }
+
+    public List<Profile> getProfiles() {
+        return profiles;
+    }
+
+    public void setProfiles(List<Profile> profiles) {
+        this.profiles = profiles;
     }
 
     public Bitmap getAvatarBitmap() {
@@ -48,6 +96,15 @@ public class User {
     }
 
     public User() {
+    }
+
+    public Profile hasProfileOnNetwork(Network network) {
+        for(Profile profile : profiles){
+            if (profile.getNetworkId().equals(network.get_id())) {
+                return profile;
+            }
+        }
+        return null;
     }
 
     public String getAvatar() {

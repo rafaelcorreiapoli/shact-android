@@ -14,7 +14,6 @@ import android.widget.ListView;
 
 import com.apliant.shact.R;
 import com.apliant.shact.models.Network;
-import com.apliant.shact.models.Profile;
 import com.apliant.shact.views.adapters.NetworksAdapter;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.yalantis.flipviewpager.utils.FlipSettings;
@@ -55,7 +54,7 @@ public class ContactsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_networks, container, false);
+        View v = inflater.inflate(R.layout.fragment_contacts, container, false);
 
 
 

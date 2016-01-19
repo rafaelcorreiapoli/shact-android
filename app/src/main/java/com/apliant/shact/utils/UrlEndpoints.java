@@ -11,5 +11,8 @@ public class UrlEndpoints {
     public static final String LOGIN_WITH_TOKEN = "/login-with-token";
     public static final String NETWORK = "/network";
     public static final String USER = "/user";
+    public static final String PUSH_PROFILE = "/push-profile";
+    public static final String POP_PROFILE = "/pop-profile";
+
 
 }

@@ -1,17 +1,20 @@
 package com.apliant.shact;
 
 import android.app.DownloadManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,6 +29,7 @@ import com.apliant.shact.network.VolleySingleton;
 import com.apliant.shact.utils.SetupUI;
 import com.apliant.shact.utils.UrlEndpoints;
 import com.google.gson.Gson;
+import com.google.gson.JsonParser;
 import com.google.inject.Inject;
 import com.soundcloud.android.crop.Crop;
 
@@ -33,6 +37,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,6 +56,8 @@ import roboguice.inject.InjectView;
 public class MyProfileActivity extends BaseActivity implements View.OnClickListener {
     ImageView profileAvatar;
     TextView profileName;
+    Bitmap auxBitmap;
+
     Toolbar toolbar;
     private static final Integer PICK_IMAGE_FROM_GALLERY = 1;
 
@@ -63,6 +71,11 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
         profileAvatar = (ImageView) findViewById(R.id.profileAvatar);
         profileName = (TextView) findViewById(R.id.profileName);
 
+        if(app.getCurrentUser() != null) {
+            profileName.setText(app.getCurrentUser().getName());
+            profileAvatar.setImageBitmap(app.getCurrentUser().getAvatarBitmap());
+        }
+
         profileAvatar.setOnClickListener(this);
         profileName.setOnClickListener(this);
         Filepicker.setKey("ArPkiQxiLTSSM66CNiGUYz");
@@ -75,11 +88,35 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
                 EasyImage.openChooser(this, "Selecione uma foto!", true);
                 break;
             case R.id.profileName:
-
+                popupSetName();
                 break;
         }
     }
 
+    private void popupSetName() {
+        final EditText textInput = new EditText(this);
+
+        new AlertDialog.Builder(this)
+                .setTitle("Qual seu nome?")
+                .setView(textInput)
+                .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String newName = textInput.getText().toString();
+                        app.getCurrentUser().setName(newName);
+                        profileName.setText(newName);
+                        setupDrawerProfile();
+                        mRequestQueue.add(updateUserProfile());
+                    }
+                })
+                .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .show();
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -103,12 +140,17 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
 
     }
 
-    private JsonObjectRequest getNewAvatarRequest(String avatarUrl) {
-        String url = UrlEndpoints.BASE_URL + UrlEndpoints.USER + "/" + app.getCurrentUser().get_id();
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("avatar", avatarUrl);
+    private JsonObjectRequest updateUserProfile() {
+        final String url = UrlEndpoints.BASE_URL + UrlEndpoints.USER + "/" + app.getCurrentUser().get_id();
+        Gson gson = new Gson();
+        JSONObject userJson = new JSONObject();
+        try {
+            userJson = new JSONObject(gson.toJson(app.getCurrentUser()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, url, new JSONObject(params), new Response.Listener<JSONObject>() {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, url, userJson, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Boolean success;
@@ -142,14 +184,24 @@ public class MyProfileActivity extends BaseActivity implements View.OnClickListe
         return request;
     }
 
-    private void onCroppedReturned(Uri uri) {
+    private void onCroppedReturned(Uri uri)  {
         profileAvatar.setImageURI(uri);
+        try {
+            auxBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        app.getCurrentUser().setAvatarBitmap(auxBitmap);
+        setupDrawerProfile();
+
         Filepicker.uploadLocalFile(Uri.parse(uri.toString()), this, new FilepickerCallback() {
             @Override
             public void onFileUploadSuccess(FPFile fpFile) {
                 // Do something on success
                 Log.i(TAG, "Uploaded " + fpFile.getUrl());
-                mRequestQueue.add(getNewAvatarRequest(fpFile.getUrl()));
+                app.getCurrentUser().setAvatar(fpFile.getUrl());
+                mRequestQueue.add(updateUserProfile());
             }
 
             @Override

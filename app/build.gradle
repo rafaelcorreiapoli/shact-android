@@ -48,6 +48,7 @@ dependencies {
 
     compile 'com.makeramen:roundedimageview:2.2.1'
     compile 'com.github.jkwiecien:EasyImage:1.1.2'
+    compile 'net.bozho.easycamera:easycamera:0.0.1:aar@aar'
     compile 'com.soundcloud.android:android-crop:1.0.1@aar'
 
     compile 'io.filepicker:filepicker-android:3.9.0'

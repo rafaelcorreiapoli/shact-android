@@ -3,6 +3,7 @@ package com.apliant.shact.models;
 /**
  * Created by rafa93br on 08/01/2016.
  */
+/*
 public class Profile {
     Network network;
     String name;
@@ -28,3 +29,4 @@ public class Profile {
         this.name = name;
     }
 }
+*/

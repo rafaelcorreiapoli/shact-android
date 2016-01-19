@@ -28,4 +28,6 @@
     <string name="tab_recents"></string>
     <string name="tab_selfie"></string>
     <string name="tab_contacts"></string>
+    <string name="my_profile_avatar">My Profile avatar</string>
+    <string name="camera_shutter">Camera shutter</string>
 </resources>

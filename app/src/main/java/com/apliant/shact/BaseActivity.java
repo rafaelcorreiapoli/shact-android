@@ -9,6 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -27,6 +29,12 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class BaseActivity extends AppCompatActivity {
     private static final String PREFERENCES_NAME = "ShactPreferences";
     protected static final String TAG = "TAG";
@@ -42,7 +50,7 @@ public class BaseActivity extends AppCompatActivity {
     Login mLoginRequest;
     AccountHeader mDrawerHeader;
     Drawer mDrawer;
-    RequestQueue mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
+    final RequestQueue mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
 
     SharedPreferences mPref;
     SharedPreferences.Editor mEditor;
@@ -62,7 +70,6 @@ public class BaseActivity extends AppCompatActivity {
             loginWithToken(new Login.LoginCallback() {
                 @Override
                 public void onSuccess(String token, User user) {
-                    Log.i(TAG, "Logged in!!");
                     app.setCurrentUser(user);
                     app.getCurrentUser().downloadAvatar(new Response.Listener<Bitmap>() {
                         @Override
@@ -197,6 +204,45 @@ public class BaseActivity extends AppCompatActivity {
                     }
                 })
                 .build();
+    }
+
+    public interface MyRequestListener {
+        void onSuccess(JSONObject response);
+        void onError(Error error);
+    }
+
+    protected JsonObjectRequest makeRequest(Integer method, String url,  JSONObject params, final MyRequestListener myRequestListener){
+        return new JsonObjectRequest(
+                method,
+                url,
+                params,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Boolean success;
+                        try {
+                            success = response.getBoolean("success");
+                            if (success) {
+                                myRequestListener.onSuccess(response);
+                            }
+                        } catch (JSONException e) {
+                            myRequestListener.onError(new Error(e.toString()));
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                myRequestListener.onError(new Error(error.toString()));
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return super.getHeaders();
+            }
+        };
     }
 
 }

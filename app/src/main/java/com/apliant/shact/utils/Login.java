@@ -98,7 +98,7 @@ public class Login {
                                     Gson gson = new Gson();
                                     User user = gson.fromJson(userJson.toString(), User.class);
                                     token = response.getString("token");
-
+                                    Log.i("TAG", user.getProfiles().size() + "  profiles ");
                                     Log.i("TAG", user.getUsername());
                                     loginCallback.onSuccess(token, user);
                                 } catch (JSONException e) {
@@ -143,7 +143,6 @@ public class Login {
                 String name;
                 String username;
                 Boolean success;
-                Log.i("TAG", response.toString());
                 try {
                     success = response.getBoolean("success");
                     if (success) try {
@@ -151,6 +150,7 @@ public class Login {
                         Gson gson = new Gson();
                         Log.i("TAG", userJson.toString());
                         User user = gson.fromJson(userJson.toString(), User.class);
+                        Log.i("TAG", Integer.toString(user.getProfiles().size()));
                         token = response.getString("token");
                         loginCallback.onSuccess(token, user);
                     } catch (JSONException e) {
